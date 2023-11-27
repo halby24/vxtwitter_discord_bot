@@ -7,20 +7,20 @@ ARG APP_NAME=shiratama_bot
 # 作業ディレクトリを設定
 WORKDIR /usr/src/$APP_NAME
 
-# ソースコードをコピー
+# 依存関係のみを先にコピーしてビルド
+COPY Cargo.toml Cargo.lock ./
+RUN mkdir src && \
+    echo "fn main() {}" > src/main.rs && \
+    cargo build && \
+    rm -rf ./*
+
+# 実際のソースコードをコピーしてビルド
 COPY . .
+RUN cargo build 
 
-# プロジェクトをビルド
-RUN cargo build --release
+RUN ln -s /usr/src/$APP_NAME/target/debug/$APP_NAME /usr/local/bin/$APP_NAME
 
-# 実行ステージ
-FROM debian:buster-slim
-
-# 同じビルド引数を再宣言
-ARG APP_NAME=shiratama_bot
-
-# ビルドされたバイナリをコピー
-COPY --from=builder /usr/src/$APP_NAME/target/release/$APP_NAME /usr/local/bin/$APP_NAME
+ENV APP_NAME $APP_NAME
 
 # コンテナ起動時に実行されるコマンド
-CMD [$APP_NAME]
+CMD $APP_NAME
