@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  shiratama_bot:
+    build:
+      context: .
+      args:
+        APP_NAME: shiratama_bot
+    restart: unless-stopped
