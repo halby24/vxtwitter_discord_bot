@@ -15,7 +15,12 @@ RUN cargo build --release
 
 # 実行ステージ
 FROM debian:buster-slim
-COPY --from=builder /usr/src/${APP_NAME}/target/release/$APP_NAME /usr/local/bin/${APP_NAME}
+
+# 同じビルド引数を再宣言
+ARG APP_NAME=shiratama_bot
+
+# ビルドされたバイナリをコピー
+COPY --from=builder /usr/src/$APP_NAME/target/release/$APP_NAME /usr/local/bin/$APP_NAME
 
 # コンテナ起動時に実行されるコマンド
 CMD [$APP_NAME]
