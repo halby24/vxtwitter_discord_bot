@@ -297,15 +297,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "discord_bot_hello"
-version = "0.1.0"
-dependencies = [
- "dotenv",
- "serenity",
- "tokio",
-]
-
-[[package]]
 name = "dotenv"
 version = "0.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1152,6 +1143,15 @@ dependencies = [
  "cfg-if",
  "cpufeatures",
  "digest",
+]
+
+[[package]]
+name = "shiratama_bot"
+version = "0.1.0"
+dependencies = [
+ "dotenv",
+ "serenity",
+ "tokio",
 ]
 
 [[package]]
