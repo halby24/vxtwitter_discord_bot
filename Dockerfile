@@ -15,7 +15,7 @@ RUN cargo build --release
 
 # 実行ステージ
 FROM debian:buster-slim
-COPY --from=builder /usr/src/$APP_NAME/target/release/$APP_NAME /usr/local/bin/$APP_NAME
+COPY --from=builder /usr/src/${APP_NAME}/target/release/$APP_NAME /usr/local/bin/${APP_NAME}
 
 # コンテナ起動時に実行されるコマンド
 CMD [$APP_NAME]
