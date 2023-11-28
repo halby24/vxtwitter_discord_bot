@@ -38,8 +38,8 @@ impl EventHandler for Handler {
         // --- x.comをvxtwitter.comに置き換える ---
         // 特定のユーザーIDを確認
         if self.user_ids.contains(&msg.author.id.get()) {
-            // 特定のユーザーIDに置き換えてください
-            if msg.content.contains("x.com") {
+            // メッセージがx.com, twitter.comを含むかどうかをチェック
+            if msg.content.contains("x.com") || msg.content.contains("twitter.com") {
                 // ニックネームまたはユーザー名を取得
                 let display_name = if let Some(guild_id) = msg.guild_id {
                     match guild_id.member(&ctx.http, msg.author.id).await {
@@ -102,6 +102,8 @@ async fn main() {
         .split(',')
         .map(|id| u64::from_str(id.trim()).expect("Invalid ID"))
         .collect::<Vec<u64>>();
+
+    println!("User IDs: {:?}", user_ids);
 
     let framework = StandardFramework::new();
 

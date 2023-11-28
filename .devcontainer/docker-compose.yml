@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  shiratama_bot_dev:
+    image: rust:1.74.0-bullseye
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ../:/workspace/shiratama_bot
+    working_dir: /workspace/shiratama_bot
