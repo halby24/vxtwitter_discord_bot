@@ -7,3 +7,5 @@ services:
       args:
         APP_NAME: shiratama_bot
     restart: unless-stopped
+    env_file:
+      - .env
