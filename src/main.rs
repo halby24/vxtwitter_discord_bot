@@ -39,7 +39,7 @@ impl EventHandler for Handler {
         // 特定のユーザーIDを確認
         if self.user_ids.contains(&msg.author.id.get()) {
             // メッセージがx.com, twitter.comを含むかどうかをチェック
-            if msg.content.contains("x.com") || msg.content.contains("twitter.com") {
+            if msg.content.contains("https://x.com") || msg.content.contains("https://twitter.com") {
                 // ニックネームまたはユーザー名を取得
                 let display_name = if let Some(guild_id) = msg.guild_id {
                     match guild_id.member(&ctx.http, msg.author.id).await {
