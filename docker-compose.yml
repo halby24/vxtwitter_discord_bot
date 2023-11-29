@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  shiratama_bot:
+  vxtwitter:
     build:
       context: .
       args:
-        APP_NAME: shiratama_bot
+        APP_NAME: vxtwitter
     restart: unless-stopped
     env_file:
       - .env

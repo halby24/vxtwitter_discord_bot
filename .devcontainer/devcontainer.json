@@ -1,12 +1,12 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/rust
 {
-	"name": "Shiratama BOT",
+	"name": "vxtwitter",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	// "image": "mcr.microsoft.com/devcontainers/rust:latest",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "shiratama_bot_dev",
-	"workspaceFolder": "/workspace/shiratama_bot",
+	"service": "vxtwitter_dev",
+	"workspaceFolder": "/workspace/vxtwitter",
 
 	// Use 'mounts' to make the cargo cache persistent in a Docker Volume.
 	// "mounts": [

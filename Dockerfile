@@ -2,7 +2,7 @@
 FROM rust:1.74 as builder
 
 # ビルド引数
-ARG APP_NAME=shiratama_bot
+ARG APP_NAME=vxtwitter
 
 # 作業ディレクトリを設定
 WORKDIR /usr/src/$APP_NAME

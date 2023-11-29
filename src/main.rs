@@ -1,4 +1,3 @@
-use std::str::FromStr;
 use dotenv::dotenv;
 use std::env;
 use serenity::{
@@ -7,16 +6,21 @@ use serenity::{
     model::{channel::Message, gateway::Ready},
     prelude::*,
 };
+use regex::Regex;
 
-struct Handler {
-    user_ids: Vec<u64>,
+fn replace_and_extract_links(text: &str) -> String {
+    let re = Regex::new(r"https?://(?:www\.)?(x\.com|twitter\.com)/\S*").unwrap();
+    let links: Vec<String> = re.find_iter(text)
+        .map(|mat| mat.as_str()
+            .replace("twitter.com", "vxtwitter.com")
+            .replace("x.com", "vxtwitter.com"))
+        .collect();
+    
+    // 置き換えられたリンクを改行で結合
+    links.join("\n")
 }
 
-impl Handler {
-    fn new(user_ids: Vec<u64>) -> Self {
-        Handler { user_ids }
-    }
-}
+struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
@@ -36,51 +40,14 @@ impl EventHandler for Handler {
         }
 
         // --- x.comをvxtwitter.comに置き換える ---
-        // 特定のユーザーIDを確認
-        if self.user_ids.contains(&msg.author.id.get()) {
-            // メッセージがx.com, twitter.comを含むかどうかをチェック
-            if msg.content.contains("https://x.com") || msg.content.contains("https://twitter.com") {
-                // ニックネームまたはユーザー名を取得
-                let display_name = if let Some(guild_id) = msg.guild_id {
-                    match guild_id.member(&ctx.http, msg.author.id).await {
-                        Ok(member) => member.nick.unwrap_or_else(|| {
-                            msg.author
-                                .global_name
-                                .clone()
-                                .unwrap_or_else(|| msg.author.name.clone())
-                        }),
-                        Err(error) => {
-                            println!("Error retrieving member info: {:?}", error);
-                            msg.author
-                                .global_name
-                                .clone()
-                                .unwrap_or_else(|| msg.author.name.clone())
-                        }
-                    }
-                } else {
-                    println!("Error retrieving guild info");
-                    msg.author
-                        .global_name
-                        .clone()
-                        .unwrap_or_else(|| msg.author.name.clone())
-                };
+        // メッセージがx.com, twitter.comを含むかどうかをチェック
+        if msg.content.contains("https://x.com") || msg.content.contains("https://twitter.com") {
+            // 置換処理を含む新しいメッセージ内容を作成
+            let links = replace_and_extract_links(&msg.content);
 
-                // 置換処理を含む新しいメッセージ内容を作成
-                let replaced_content = msg
-                    .content
-                    .replace("twitter.com", "vxtwitter.com")
-                    .replace("x.com", "vxtwitter.com");
-                let new_content = format!("From: {}\n{}", display_name, replaced_content);
-
-                // 新しいメッセージを送信
-                if let Err(why) = msg.channel_id.say(&ctx.http, &new_content).await {
-                    println!("Error sending message: {:?}", why);
-                }
-
-                // 元のメッセージを削除
-                if let Err(why) = msg.delete(&ctx.http).await {
-                    println!("Error deleting message: {:?}", why);
-                }
+            // 新しいメッセージを送信
+            if let Err(why) = msg.channel_id.say(&ctx.http, &links).await {
+                println!("Error sending message: {:?}", why);
             }
         }
     }
@@ -97,17 +64,7 @@ async fn main() {
     let token = env::var("BOT_TOKEN")
         .expect("Expected a token in the environment");
 
-    let user_ids = env::var("USER_IDS")
-        .expect("Expected USER_IDS in the environment")
-        .split(',')
-        .map(|id| u64::from_str(id.trim()).expect("Invalid ID"))
-        .collect::<Vec<u64>>();
-
-    println!("User IDs: {:?}", user_ids);
-
     let framework = StandardFramework::new();
-
-    let handler = Handler::new(user_ids);
 
     // 必要なIntentを設定
     let intents = 
@@ -116,7 +73,7 @@ async fn main() {
         GatewayIntents::DIRECT_MESSAGES;
 
     let mut client = Client::builder(&token, intents)
-        .event_handler(handler)
+        .event_handler(Handler)
         .framework(framework)
         .await
         .expect("Error creating client");
