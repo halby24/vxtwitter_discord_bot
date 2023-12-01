@@ -24,13 +24,13 @@ jobs:
     - name: Extract tag name
       id: tag_name
       run: |
-        TAG_NAME=${GITHUB_REF#refs/tags/}
-        FORMATTED_TAG_NAME=${TAG_NAME#v}
-        echo "FORMATTED_TAG_NAME=$FORMATTED_TAG_NAME" >> $GITHUB_ENV
+        TAG_NAME=${GITHUB_REF##*/}
+        VERSION=${TAG_NAME#v}
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
         context: .
         push: true
-        tags: ghcr.io/${{ github.repository }}:${{ steps.tag_name.outputs.TAG_NAME }},ghcr.io/${{ github.repository }}:latest
+        tags: ghcr.io/${{ github.repository }}:${{ env.VERSION }},ghcr.io/${{ github.repository }}:latest
