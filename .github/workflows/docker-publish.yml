@@ -24,7 +24,7 @@ jobs:
     - name: Extract tag name
       id: tag_name
       run: |
-        TAG_NAME=$(git tag --points-at HEAD)
+        TAG_NAME=${GITHUB_REF#refs/tags/}
         FORMATTED_TAG_NAME=${TAG_NAME#v}
         echo "FORMATTED_TAG_NAME=$FORMATTED_TAG_NAME" >> $GITHUB_ENV
 
