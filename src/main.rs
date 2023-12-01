@@ -1,3 +1,6 @@
+// Copyright 2023 HALBY
+// This software is released under the MIT License.
+
 use std::env;
 use serenity::{
     async_trait,
