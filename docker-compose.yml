@@ -5,7 +5,7 @@ services:
     build:
       context: .
       args:
-        APP_NAME: vxtwitter
+        APP_NAME: vxtwitter_discord_bot
     restart: unless-stopped
     env_file:
       - .env

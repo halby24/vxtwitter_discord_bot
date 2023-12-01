@@ -1,12 +1,12 @@
 [package]
-name = "vxtwitter"
+name = "vxtwitter_discord_bot"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-serenity = { git = "https://github.com/serenity-rs/serenity.git", branch = "current" }
 tokio = { version = "1.21.2", features = ["full"] }
 dotenv = "0.15.0"
 regex = "1.5.4"
+serenity = "0.12.0"

@@ -1,4 +1,3 @@
-use dotenv::dotenv;
 use std::env;
 use serenity::{
     async_trait,
@@ -59,8 +58,6 @@ impl EventHandler for Handler {
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
-
     let token = env::var("BOT_TOKEN")
         .expect("Expected a token in the environment");
 
